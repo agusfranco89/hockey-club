@@ -7,7 +7,7 @@ const path = require('path');
 const initSqlJs = require('sql.js');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3000;
 const JWT_SECRET = 'hockey_club_secret_2024';
 const DB_PATH = path.join(__dirname, 'database.db');
 
