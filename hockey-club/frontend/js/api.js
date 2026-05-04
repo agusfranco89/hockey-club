@@ -1,5 +1,5 @@
 
-const API_BASE = window.location.origin + '/api';
+const API_BASE = '/api';
 
 const api = {
   token: localStorage.getItem('hc_token'),
