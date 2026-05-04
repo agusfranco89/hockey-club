@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hockey Club</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- LOGIN -->
+  <div id="login-screen" class="screen active">
+    <div class="login-bg">
+      <div class="stripe s1"></div>
+      <div class="stripe s2"></div>
+      <div class="stripe s3"></div>
+    </div>
+    <div class="login-wrap">
+      <div class="login-logo">
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="37" stroke="white" stroke-width="2.5"/>
+          <path d="M18 54 Q28 22 40 28 Q52 34 62 18" stroke="white" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <circle cx="62" cy="17" r="5" fill="#E63946"/>
+          <line x1="14" y1="57" x2="66" y2="57" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <span class="logo-sub">CLUB DE</span>
+          <span class="logo-main">HOCKEY</span>
+        </div>
+      </div>
+      <div class="login-card">
+        <h2>Iniciar sesión</h2>
+        <div id="login-error" class="error-msg hidden"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="tu@email.com"/></div>
+        <div class="form-group"><label>Contraseña</label><input type="password" id="login-password" placeholder="••••••••"/></div>
+        <button class="btn-primary full" id="login-btn">ENTRAR</button>
+        <div class="demo-hint">
+          <span>coach@club.com · coach123</span>
+          <span>player@club.com · player123</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="main-screen" class="screen">
+    <aside id="sidebar">
+      <div class="sb-logo">
+        <svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" stroke="white" stroke-width="2"/><path d="M8 24 Q13 10 18 13 Q23 16 28 8" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="28" cy="7" r="2.5" fill="#E63946"/><line x1="6" y1="26" x2="30" y2="26" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span>HOCKEY CLUB</span>
+      </div>
+      <nav id="sb-nav"></nav>
+      <div class="sb-user">
+        <div class="sb-avatar" id="sb-avatar"></div>
+        <div class="sb-info">
+          <span id="sb-name"></span>
+          <span id="sb-role"></span>
+        </div>
+        <button id="logout-btn" title="Salir">↪</button>
+      </div>
+    </aside>
+
+    <main id="content">
+
+      <!-- DASHBOARD -->
+      <div id="page-dashboard" class="page active">
+        <div class="page-header"><h1>Panel Principal</h1><p id="dash-greeting"></p></div>
+        <div id="dash-cards" class="stat-cards"></div>
+        <div id="dash-recent"></div>
+      </div>
+
+      <!-- PLANTEL (coach) -->
+      <div id="page-users" class="page">
+        <div class="page-header"><h1>Plantel</h1><button class="btn-primary" id="add-user-btn">+ Nueva</button></div>
+        <div id="users-grid" class="users-grid"></div>
+      </div>
+
+      <!-- JUGADORA DETAIL (coach view) -->
+      <div id="page-player-detail" class="page">
+        <div class="page-header">
+          <div style="display:flex;align-items:center;gap:12px">
+            <button class="btn-secondary" id="back-to-plantel">← Volver</button>
+            <h1 id="player-detail-title">Jugadora</h1>
+          </div>
+          <button class="btn-primary" id="add-note-btn">+ Nota</button>
+        </div>
+        <div id="player-detail-content"></div>
+      </div>
+
+      <!-- EJERCICIOS -->
+      <div id="page-drills" class="page">
+        <div class="page-header"><h1>Ejercicios</h1><button class="btn-primary" id="add-drill-btn">+ Nuevo</button></div>
+        <div id="drills-grid" class="drills-grid"></div>
+      </div>
+
+      <!-- ENTRENAMIENTOS -->
+      <div id="page-sessions" class="page">
+        <div class="page-header"><h1>Entrenamientos</h1><button class="btn-primary" id="add-session-btn">+ Nuevo</button></div>
+        <div id="sessions-list"></div>
+      </div>
+
+      <!-- MI PERFIL (player) -->
+      <div id="page-mi-perfil" class="page">
+        <div class="page-header"><h1>Mi Perfil</h1><button class="btn-secondary" id="edit-profile-btn">Editar</button></div>
+        <div id="mi-perfil-content"></div>
+      </div>
+
+      <!-- MIS ENTRENAMIENTOS (player) -->
+      <div id="page-mis-entrenamientos" class="page">
+        <div class="page-header"><h1>Mis Entrenamientos</h1></div>
+        <div id="mis-entrenamientos-list"></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL genérico -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div id="modal-box" class="modal-box">
+    <div class="modal-hdr">
+      <h3 id="modal-title"></h3>
+      <button id="modal-close">✕</button>
+    </div>
+    <div id="modal-body" class="modal-body"></div>
+  </div>
+</div>
+
+<!-- CANVAS EDITOR (pantalla completa) -->
+<div id="canvas-modal" class="canvas-modal hidden">
+  <div class="canvas-hdr">
+    <h3 id="canvas-title">Editor de Cancha</h3>
+    <div class="canvas-hdr-btns">
+      <button class="btn-secondary" id="canvas-clear-btn">🗑 Limpiar</button>
+      <button class="btn-primary" id="canvas-save-btn">💾 Guardar</button>
+      <button class="canvas-close" id="canvas-close-btn">✕</button>
+    </div>
+  </div>
+  <div class="canvas-layout">
+    <div class="canvas-toolbar">
+
+      <div class="tool-group">
+        <div class="tg-label">HERRAMIENTAS</div>
+        <button class="tool-btn active" data-tool="select" title="Seleccionar / Mover">⬡</button>
+        <button class="tool-btn" data-tool="pen"    title="Dibujar libremente">✏</button>
+        <button class="tool-btn" data-tool="line"   title="Flecha / jugada">➜</button>
+        <button class="tool-btn" data-tool="dashed" title="Movimiento sin pelota">⤍</button>
+        <button class="tool-btn" data-tool="erase"  title="Borrar">✕</button>
+      </div>
+
+      <div class="tool-group">
+        <div class="tg-label">COLOR</div>
+        <div class="color-row">
+          <button class="color-btn active" data-color="#E63946" style="background:#E63946"></button>
+          <button class="color-btn" data-color="#1D3557" style="background:#1D3557"></button>
+          <button class="color-btn" data-color="#ffffff" style="background:#fff;border:1px solid #555"></button>
+          <button class="color-btn" data-color="#FFB703" style="background:#FFB703"></button>
+          <button class="color-btn" data-color="#2DC653" style="background:#2DC653"></button>
+        </div>
+      </div>
+
+      <div class="tool-group">
+        <div class="tg-label">JUGADORAS</div>
+        <div class="elem-grid">
+          <button class="elem-btn" data-element="player-red" title="Jugadora propia">
+            <svg viewBox="0 0 32 32"><circle cx="16" cy="11" r="6" fill="#E63946"/><ellipse cx="16" cy="24" rx="8" ry="5" fill="#E63946"/></svg>
+          </button>
+          <button class="elem-btn" data-element="player-blue" title="Rival">
+            <svg viewBox="0 0 32 32"><circle cx="16" cy="11" r="6" fill="#1D3557"/><ellipse cx="16" cy="24" rx="8" ry="5" fill="#1D3557"/></svg>
+          </button>
+          <button class="elem-btn" data-element="goalkeeper" title="Arquera">
+            <svg viewBox="0 0 32 32"><circle cx="16" cy="11" r="6" fill="#FFB703"/><ellipse cx="16" cy="24" rx="8" ry="5" fill="#FFB703"/><text x="16" y="14" text-anchor="middle" font-size="7" fill="#000" font-weight="bold">GK</text></svg>
+          </button>
+          <button class="elem-btn" data-element="ref" title="Árbitro">
+            <svg viewBox="0 0 32 32"><circle cx="16" cy="11" r="6" fill="#888"/><ellipse cx="16" cy="24" rx="8" ry="5" fill="#888"/><text x="16" y="14" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">R</text></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="tool-group">
+        <div class="tg-label">ELEMENTOS</div>
+        <div class="elem-grid">
+          <button class="elem-btn" data-element="ball" title="Pelota">
+            <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="9" fill="white" stroke="#444" stroke-width="1.5"/><path d="M10,12 Q16,8 22,12 Q22,20 16,24 Q10,20 10,12Z" fill="#555" opacity="0.3"/></svg>
+          </button>
+          <button class="elem-btn" data-element="cone" title="Cono naranja">
+            <svg viewBox="0 0 32 32"><polygon points="16,4 26,26 6,26" fill="#FF6B00"/><ellipse cx="16" cy="26" rx="10" ry="3" fill="#cc5500"/></svg>
+          </button>
+          <button class="elem-btn" data-element="cone-blue" title="Cono azul">
+            <svg viewBox="0 0 32 32"><polygon points="16,4 26,26 6,26" fill="#1D3557"/><ellipse cx="16" cy="26" rx="10" ry="3" fill="#0d1f33"/></svg>
+          </button>
+          <button class="elem-btn" data-element="cone-yellow" title="Cono amarillo">
+            <svg viewBox="0 0 32 32"><polygon points="16,4 26,26 6,26" fill="#FFB703"/><ellipse cx="16" cy="26" rx="10" ry="3" fill="#cc9200"/></svg>
+          </button>
+        </div>
+        <div class="elem-grid" style="margin-top:4px">
+          <button class="elem-btn wide" data-element="goal-left" title="Arco izquierdo" style="grid-column:span 2">
+            <svg viewBox="0 0 64 32"><rect x="2" y="6" width="60" height="20" fill="none" stroke="white" stroke-width="2.5"/><rect x="2" y="6" width="60" height="3" fill="#E63946"/></svg>
+          </button>
+          <button class="elem-btn wide" data-element="hurdle" title="Valla" style="grid-column:span 2">
+            <svg viewBox="0 0 64 32"><rect x="8" y="10" width="48" height="4" fill="#FFB703"/><line x1="16" y1="14" x2="16" y2="26" stroke="#FFB703" stroke-width="3"/><line x1="48" y1="14" x2="48" y2="26" stroke="#FFB703" stroke-width="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="tool-group">
+        <div class="tg-label">GROSOR</div>
+        <input type="range" id="brush-size" min="1" max="10" value="3" class="brush-range"/>
+        <span id="brush-label" style="color:#aaa;font-size:11px;text-align:center;display:block">3px</span>
+      </div>
+
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="field-canvas"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/canvas.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
